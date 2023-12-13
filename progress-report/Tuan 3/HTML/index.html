@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đồ Án Cơ Sở Nghành</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #000000;
+            margin: 0;
+            font-size: 1rem;
+        }
+        
+        #gradient {
+            width: 100%;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+
+        .wrapper {
+            height: 100%;
+            display: grid;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .typing-demo {
+            width: 90%; /* Sử dụng đơn vị % cho kích thước */
+            max-width: 43ch;
+            animation: typing 2s steps(23),
+            blink .5s step-end
+            infinite alternate;
+            white-space: nowrap;
+            overflow: hidden;
+            font-family: monospace;
+            font-size: 3.5vw; /* Sử dụng đơn vị vw cho kích thước */
+            color: aliceblue;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 0%; /* Sử dụng đơn vị vh cho khoảng cách */
+        }
+
+        .button-container button {
+            margin: 2vh; /* Sử dụng đơn vị vh cho khoảng cách */
+            font-size: 2vw; /* Sử dụng đơn vị vw cho kích thước */
+        }
+
+        .large-button {
+            padding: 1.5rem 3rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 1rem;
+            margin: 1vh 1vw; /* Sử dụng đơn vị vh và vw cho khoảng cách */
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1;
+        }
+
+        .loader {
+            width: 10vw;
+            height: 4vh;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -2vh -5vw;
+            display: none;
+            z-index: 2;
+        }
+
+        .loader div {
+            width: 2vw;
+            height: 2vw;
+            background: #b10707;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        @keyframes animate {
+            /* Keyframes giữ nguyên không đổi */
+        }
+
+    </style>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <!--Hiển thị loading và overlay-->
+    <div class="overlay" id="overlay"></div>
+    <div class="loader" id="loading-overlay">
+        <div id="d1"></div>
+        <div id="d2"></div>
+        <div id="d3"></div>
+        <div id="d4"></div>
+        <div id="d5"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/addons/p5.dom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ml5@latest/dist/ml5.min.js"></script>
+    
+    <div id="gradient">
+        <div class="wrapper"> 
+            <div class="typing-demo"><br>
+                Chào mừng bạn đến Đồ án CSN của Lê Trực Tín. 
+            </div>
+            <br><br><br>
+            <img style="width: 1050px;" src="https://teachablemachine.withgoogle.com/v1/assets/teachable-machine-splash-desktop.svg">
+            <br><br><br>
+            <div class="button-container">
+                <button style="background-color: #243665; color: #8bd8bd;" class="large-button" onclick="chuyenTrang('nhandanghinhanh.html')"><b>Hình Ảnh</b></button>
+                <button style="background-color: #f3bc00; color: #384395;" class="large-button" onclick="chuyenTrang('nhandangamthanh.html')"><b>Âm Thanh</b></button>
+                <button style="background-color: #F96167; color: #fce77d;" class="large-button" onclick="chuyenTrang('nhandangdangnguoi.html')"><b>Dáng Người</b></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var colors = new Array(
+            [62, 35, 255],
+            [60, 255, 60],
+            [255, 35, 98],
+            [45, 175, 230],
+            [255, 0, 255],
+            [255, 128, 0]);
+
+        var step = 0;
+        var colorIndices = [0, 1, 2, 3];
+        var gradientSpeed = 0.002;
+        function updateGradient() {
+
+            if ($ === undefined) return;
+
+            var c0_0 = colors[colorIndices[0]];
+            var c0_1 = colors[colorIndices[1]];
+            var c1_0 = colors[colorIndices[2]];
+            var c1_1 = colors[colorIndices[3]];
+
+            var istep = 1 - step;
+            var r1 = Math.round(istep * c0_0[0] + step * c0_1[0]);
+            var g1 = Math.round(istep * c0_0[1] + step * c0_1[1]);
+            var b1 = Math.round(istep * c0_0[2] + step * c0_1[2]);
+            var color1 = "rgb(" + r1 + "," + g1 + "," + b1 + ")";
+
+            var r2 = Math.round(istep * c1_0[0] + step * c1_1[0]);
+            var g2 = Math.round(istep * c1_0[1] + step * c1_1[1]);
+            var b2 = Math.round(istep * c1_0[2] + step * c1_1[2]);
+            var color2 = "rgb(" + r2 + "," + g2 + "," + b2 + ")";
+
+            $('#gradient').css({
+                background: "-webkit-gradient(linear, left top, right top, from(" + color1 + "), to(" + color2 + "))"
+            }).css({
+                background: "-moz-linear-gradient(left, " + color1 + " 0%, " + color2 + " 100%)"
+            });
+            step += gradientSpeed;
+            if (step >= 1) {
+                step %= 1;
+                colorIndices[0] = colorIndices[1];
+                colorIndices[2] = colorIndices[3];
+                colorIndices[1] = (colorIndices[1] + Math.floor(1 + Math.random() * (colors.length - 1))) % colors.length;
+                colorIndices[3] = (colorIndices[3] + Math.floor(1 + Math.random() * (colors.length - 1))) % colors.length;
+
+            }
+        }
+        setInterval(updateGradient, 10);
+    </script>
+    
+    <script>
+        // Biến kiểm soát hiệu ứng loading
+        let isLoading = false;
+
+        function chuyenTrang(url) {
+            // Chỉ hiển thị loading khi isLoading là false
+            if (!isLoading) {
+                // Hiển thị overlay và loading khi nhấn vào nút
+                document.getElementById("overlay").style.display = "block";
+                document.getElementById("loading-overlay").style.display = "block";
+                isLoading = true; // Đánh dấu là hiệu ứng loading đang chạy
+
+                // Giả định thời gian loading (có thể thay đổi theo nhu cầu)
+                setTimeout(function () {
+                    // Chuyển đến trang được chỉ định sau khi thời gian loading
+                    window.location.href = url;
+                }, 2000); // Giả sử 2 giây là thời gian loading
+            }
+        }
+    </script>
+
+</body>
+</html>

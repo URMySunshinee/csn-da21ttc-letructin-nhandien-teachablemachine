@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    
+<script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/p5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/addons/p5.dom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ml5@latest/dist/ml5.min.js"></script>
+
+<div class="overlay" id="overlay"></div>
+<div class="loader" id="loading-overlay">
+    <div id="d1"></div>
+    <div id="d2"></div>
+    <div id="d3"></div>
+    <div id="d4"></div>
+    <div id="d5"></div>
+</div>
+
+<div class="wrapper">
+    <div class="text">
+        <p style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: xx-large;">Nhận Diện Qua Hình Ảnh</p>
+    </div> <br><br>
+
+    <div class="button-container">
+        <button class="large-button" onclick="chuyenTrang('nhandangamthanh.html')"><b>Âm Thanh</b></button>
+        <button class="large-button1" onclick="chuyenTrang('nhandangdangnguoi.html')"><b>Dáng Người</b></button>
+    </div>
+    <br><br>
+    <div class="button-container">
+        <button class="large-button2" onclick="chuyenTrang('index.html')">Trang Chính</button>
+    </div>
+
+    <div class="video">
+    <script type="text/javascript">
+  // Classifier Variable
+    let classifier;
+  // Model URL
+    let imageModelURL = 'https://teachablemachine.withgoogle.com/models/eNdBmrJfq/';
+  
+  // Video
+    let video;
+    let flippedVideo;
+  // To store the classification
+    let label = "Đợi xíu nhé!";
+
+  // Load the model first
+    function preload() {
+        classifier = ml5.imageClassifier(imageModelURL + 'model.json');
+    }
+
+    function setup() {
+        createCanvas(530, 460);
+    // Create the video
+        video = createCapture(VIDEO);
+        video.size(530, 445);
+        video.hide();
+
+        flippedVideo = ml5.flipImage(video);
+    // Start classifying
+        classifyVideo();
+    }
+
+    function draw() {
+        background(0);
+    // Draw the video
+        image(flippedVideo, 0, 0);
+
+    // Draw the label
+        fill(255);
+        textSize(40);
+        textAlign(CENTER);
+        text(label, width / 2, height - 4);
+    }
+
+  // Get a prediction for the current video frame
+    function classifyVideo() {
+        flippedVideo = ml5.flipImage(video)
+        classifier.classify(flippedVideo, gotResult);
+        flippedVideo.remove();
+
+    }
+
+  // When we get a result
+    function gotResult(error, results) {
+    // If there is an error
+        if (error) {
+        console.error(error);
+        return;
+        }
+    // The results are in an array ordered by confidence.
+    // console.log(results[0]);
+        label = results[0].label;
+    // Classifiy again!
+        classifyVideo();
+    }
+    </script>
+    </div>
+
+
+<!--Hàm chuyển đến liên kết trang-->
+    <script>
+        // Biến kiểm soát hiệu ứng loading
+        let isLoading = false;
+
+        function chuyenTrang(url) {
+            // Chỉ hiển thị loading khi isLoading là false
+            if (!isLoading) {
+                // Hiển thị overlay và loading khi nhấn vào nút
+                document.getElementById("overlay").style.display = "block";
+                document.getElementById("loading-overlay").style.display = "block";
+                isLoading = true; // Đánh dấu là hiệu ứng loading đang chạy
+
+                // Giả định thời gian loading (có thể thay đổi theo nhu cầu)
+                setTimeout(function () {
+                    // Chuyển đến trang được chỉ định sau khi thời gian loading
+                    window.location.href = url;
+                }, 2000); // Giả sử 2 giây là thời gian loading
+            }
+        }
+    </script>
+</div>
+
+
+
+
+</body>
+</html>

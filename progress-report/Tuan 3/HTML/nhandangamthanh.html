@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+    <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+
+<div class="overlay" id="overlay"></div>
+<div class="loader" id="loading-overlay">
+    <div id="d1"></div>
+    <div id="d2"></div>
+    <div id="d3"></div>
+    <div id="d4"></div>
+    <div id="d5"></div>
+</div>
+
+<div class="wrapper">
+    <div class="text">
+        <p style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: xx-large;">Nhận Diện Âm Thanh</p>
+    </div> <br><br>
+
+    <div class="button-container">
+        <button class="large-button" onclick="chuyenTrang('nhandangdangnguoi.html')"><b>Dáng Người</b></button>
+        <button class="large-button1" onclick="chuyenTrang('nhandanghinhanh.html')"><b>Hình Ảnh</b></button>
+    </div>
+    <br><br>
+    <div class="button-container">
+        <button class="large-button2" onclick="chuyenTrang('index.html')">Trang Chính</button>
+    </div>
+
+    <div class="video">
+        <script type="text/javascript">
+            // Global variable to store the classifier
+          let classifier;
+          
+          // Label
+          let label = 'Đợi Xíu Nhé <3';
+          
+          // Teachable Machine model URL:
+          let soundModel = 'https://teachablemachine.withgoogle.com/models/zLeYEV-id/';
+          
+          
+          function preload() {
+            // Load the model
+            classifier = ml5.soundClassifier(soundModel + 'model.json');
+          }
+          
+          function setup() {
+            createCanvas(520, 440);
+            // Start classifying
+            // The sound model will continuously listen to the microphone
+            classifier.classify(gotResult);
+          }
+          
+          function draw() {
+            background(0);
+            // Draw the label in the canvas
+            fill(255);
+            textSize(42);
+            textAlign(CENTER, CENTER);
+            text(label, width / 2, height / 2);
+          }
+          
+          
+          // The model recognizing a sound will trigger this event
+          function gotResult(error, results) {
+            if (error) {
+              console.error(error);
+              return;
+            }
+            // The results are in an array ordered by confidence.
+            // console.log(results[0]);
+            label = results[0].label;
+          }
+          </script>
+
+<!--Hàm chuyển đến liên kết trang-->
+
+
+    </div>
+
+    <script>
+        // Biến kiểm soát hiệu ứng loading
+        let isLoading = false;
+
+        function chuyenTrang(url) {
+            // Chỉ hiển thị loading khi isLoading là false
+            if (!isLoading) {
+                // Hiển thị overlay và loading khi nhấn vào nút
+                document.getElementById("overlay").style.display = "block";
+                document.getElementById("loading-overlay").style.display = "block";
+                isLoading = true; // Đánh dấu là hiệu ứng loading đang chạy
+
+                // Giả định thời gian loading (có thể thay đổi theo nhu cầu)
+                setTimeout(function () {
+                    // Chuyển đến trang được chỉ định sau khi thời gian loading
+                    window.location.href = url;
+                }, 2000); // Giả sử 2 giây là thời gian loading
+            }
+        }
+    </script>
+</div>
+
+
+
+
+</body>
+</html>
