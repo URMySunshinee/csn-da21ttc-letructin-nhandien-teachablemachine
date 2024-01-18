@@ -1,0 +1,166 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.text {
+    margin-bottom: 10px;
+}
+
+.video {
+    margin-bottom: 10px;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+}
+.large-button {
+padding: 15px 30px;
+font-size: x-large;
+cursor: pointer;
+border: none;
+border-radius: 15px;
+background-color: #f3bc00;
+color: #384395;
+margin: 10px;
+}
+.large-button1 {
+padding: 15px 30px;
+font-size: x-large;
+cursor: pointer;
+border: none;
+border-radius: 15px;
+background-color: #F96167;
+color: #fce77d;
+margin: 10px;
+margin-right: 70px;
+}
+.large-button2 {
+padding: 15px 30px;
+font-size: 16px;
+cursor: pointer;
+border: none;
+border-radius: 15px;
+background-color: #3498db;
+color: #fff;
+margin-right: 55px;
+}
+.large-button:active {
+    transform: scale(0.90); /* Giảm kích thước khi nhấn vào */
+  }
+  .large-button1:active {
+    transform: scale(0.90); /* Giảm kích thước khi nhấn vào */
+  }
+  .large-button2:active {
+    transform: scale(0.90); /* Giảm kích thước khi nhấn vào */
+  }
+.text{
+    display: block;
+    margin-right: 55px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: x-large;
+    animation: typing 2s steps(23),
+    blink .5s step-end
+    infinite alternate;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@keyframes typing {
+    from {width: 0}
+}
+@keyframes blink {
+    50% {
+        border-color: transparent
+    }
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu đen với độ trong suốt */
+    display: none; /* Ẩn overlay ban đầu */
+    z-index: 1;
+}
+
+.loader {
+    width: 100px;
+    height: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -20px -50px;
+    display: none; /* Ẩn hiệu ứng ban đầu */
+    z-index: 2; /* Hiệu ứng loading nổi bật hơn overlay */
+}
+
+.loader div {
+    width: 20px;
+    height: 20px;
+    background: #b10707; /* Màu trắng nổi bật hơn */
+    border-radius: 50%;
+    position: absolute;
+}
+
+#d1 {
+    animation: animate 2s linear infinite;
+}
+
+#d2 {
+    animation: animate 2s linear infinite -.4s;
+}
+
+#d3 {
+    animation: animate 2s linear infinite -.8s;
+}
+
+#d4 {
+    animation: animate 2s linear infinite -1.2s;
+}
+
+#d5 {
+    animation: animate 2s linear infinite -1.6s;
+}
+
+@keyframes animate {
+    0% {
+        left: 100px;
+        top: 0;
+    }
+    80% {
+        left: 0;
+        top: 0;
+    }
+    85% {
+        left: 0;
+        top: -20px;
+        width: 20px;
+        height: 20px;
+    }
+    90% {
+        width: 40px;
+        height: 15px;
+    }
+    95% {
+        left: 100px;
+        top: -20px;
+        width: 20px;
+        height: 20px;
+    }
+    100% {
+        left: 100px;
+        top: 0;
+    }
+}

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #canvas {
+      margin-top: 20px;
+    }
+
+    #label-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .button-container {
+      display: flex;
+    }
+
+    .button-container button {
+      margin-top: 20px;
+      margin-right: 10px;
+      padding: 15px 30px;
+      font-size: x-large;
+      cursor: pointer;
+      border-radius: 15px;
+      background-color: #3498db;
+      color: #fff;
+    }
+    .button-container .button1 {
+      margin-top: 10px;
+      margin-right: 15px;
+      padding: 15px 30px;
+      font-size: x-large;
+      cursor: pointer;
+      background-color: #f3bc00;
+      color: #384395;
+    }
+    .button-container .button2 {
+      margin-top: 10px;
+      margin-left: 15px;
+      padding: 15px 30px;
+      font-size: x-large;
+      cursor: pointer;
+      background-color: #F96167;
+      color: #fce77d;
+    }
+    .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu đen với độ trong suốt */
+    display: none; /* Ẩn overlay ban đầu */
+    z-index: 1;
+}
+
+.loader {
+    width: 100px;
+    height: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -20px -50px;
+    display: none; /* Ẩn hiệu ứng ban đầu */
+    z-index: 2; /* Hiệu ứng loading nổi bật hơn overlay */
+}
+
+.loader div {
+    width: 20px;
+    height: 20px;
+    background: #b10707; /* Màu trắng nổi bật hơn */
+    border-radius: 50%;
+    position: absolute;
+}
+
+#d1 {
+    animation: animate 2s linear infinite;
+}
+
+#d2 {
+    animation: animate 2s linear infinite -.4s;
+}
+
+#d3 {
+    animation: animate 2s linear infinite -.8s;
+}
+
+#d4 {
+    animation: animate 2s linear infinite -1.2s;
+}
+
+#d5 {
+    animation: animate 2s linear infinite -1.6s;
+}
+
+@keyframes animate {
+    0% {
+        left: 100px;
+        top: 0;
+    }
+    80% {
+        left: 0;
+        top: 0;
+    }
+    85% {
+        left: 0;
+        top: -20px;
+        width: 20px;
+        height: 20px;
+    }
+    90% {
+        width: 40px;
+        height: 15px;
+    }
+    95% {
+        left: 100px;
+        top: -20px;
+        width: 20px;
+        height: 20px;
+    }
+    100% {
+        left: 100px;
+        top: 0;
+    }
+}
+  </style>
+  <title>Document</title>
+</head>
+<body>
+
+  <div class="overlay" id="overlay"></div>
+<div class="loader" id="loading-overlay">
+    <div id="d1"></div>
+    <div id="d2"></div>
+    <div id="d3"></div>
+    <div id="d4"></div>
+    <div id="d5"></div>
+</div>
+
+  <div>
+    <p style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: xx-large;">Nhận Diện Dáng Người</p>
+  </div>
+
+  <div><canvas id="canvas"></canvas></div>
+
+  <div id="label-container"></div>
+  <div class="button-container">
+    <button class="button1" type="button" onclick="chuyenTrang('nhandanghinhanh.html')"><b>Hình Ảnh</b></button>
+    <button class="button2" type="button" onclick="chuyenTrang('nhandangamthanh.html')"><b>Âm Thanh</b></button>
+  </div>
+  <div class="button-container">
+  <button type="button" onclick="chuyenTrang('index.html')">Trang Chính</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
+
+  <script type="text/javascript">
+    const URL = "https://teachablemachine.withgoogle.com/models/4EPVxe7-p/";
+    let model, webcam, ctx, labelContainer, maxPredictions;
+
+    async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        model = await tmPose.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        const size = { width: 530, height: 360 };
+        const flip = true;
+        webcam = new tmPose.Webcam(size.width, size.height, flip);
+        await webcam.setup();
+        await webcam.play();
+        window.requestAnimationFrame(loop);
+
+        const canvas = document.getElementById("canvas");
+        canvas.width = size.width; canvas.height = size.height;
+        ctx = canvas.getContext("2d");
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) {
+            labelContainer.appendChild(document.createElement("div"));
+        }
+    }
+
+    async function loop(timestamp) {
+        webcam.update();
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+
+    async function predict() {
+    const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+    const prediction = await model.predict(posenetOutput);
+
+    prediction.sort((a, b) => b.probability - a.probability);
+    const topPrediction = prediction[0];
+
+    // Hiển thị tên Class
+    const classPrediction = topPrediction.className;
+    labelContainer.childNodes[0].innerHTML = classPrediction;
+
+    labelContainer.childNodes[0].style.fontFamily = 'Arial';
+    labelContainer.childNodes[0].style.fontWeight = 'bold';
+    labelContainer.childNodes[0].style.fontSize = '40px';
+
+    drawPose(pose);
+}
+
+    function drawPose(pose) {
+        if (webcam.canvas) {
+            ctx.drawImage(webcam.canvas, 0, 0);
+            if (pose) {
+                const minPartConfidence = 0.5;
+                tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
+                tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
+            }
+        }
+    }
+    init();
+  </script>
+
+
+<!--Hàm chuyển đến liên kết trang-->
+<script>
+  // Biến kiểm soát hiệu ứng loading
+  let isLoading = false;
+
+  function chuyenTrang(url) {
+      // Chỉ hiển thị loading khi isLoading là false
+      if (!isLoading) {
+          // Hiển thị overlay và loading khi nhấn vào nút
+          document.getElementById("overlay").style.display = "block";
+          document.getElementById("loading-overlay").style.display = "block";
+          isLoading = true; // Đánh dấu là hiệu ứng loading đang chạy
+
+          // Giả định thời gian loading (có thể thay đổi theo nhu cầu)
+          setTimeout(function () {
+              // Chuyển đến trang được chỉ định sau khi thời gian loading
+              window.location.href = url;
+          }, 2000); // 2 giây là thời gian loading
+      }
+  }
+</script>
+
+</body>
+</html>
