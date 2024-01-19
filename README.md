@@ -32,7 +32,7 @@ Kết quả sau khi chạy code: <br> ![topdev](https://i.pinimg.com/736x/3e/bf/
  ## Lời cảm ơn
  Xin chân thành cảm ơn đối với các thầy cô của trường Đại học Trà Vinh, đặc biệt là các thầy cô khoa Công Nghệ Thông Tin của trường đã tạo điều kiện cho em được trải nghiệm làm Đồ án đầu tiên của em, cụ thể hơn là Đồ án Cơ Sở Ngành. Và cũng xin chân thành cảm ơn thầy Trầm Hoàng Nam (GVHD) và thầy Nguyễn Bảo Ân đã nhiệt tình hướng dẫn em hoàn thành tốt đồ án của mình.
 
-## Thông tin tác giả:
+## Thông tin tác giả
 Lê Trực Tín <br>
 Email: hztinle1006@gmail.com <br>
 SĐT: 0949062229
