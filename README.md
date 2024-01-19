@@ -5,7 +5,7 @@
 | :--------------| :------------------| 
 | Trầm Hoàng Nam | Lê Trực Tín        | 
 
-## Nội dung của dự án.
+## Nội dung của dự án
 Đề tài này tôi nghiên cứu sử dụng công cụ [Teachable Machine](https://teachablemachine.withgoogle.com/) để huấn luyện mô hình nhận dạng hình ảnh, âm thanh, dáng người. Sau đó tích hợp mô hình đã huấn luyện vào trong trang web HTML.
 
 ## Công cụ sử dụng trong dự án
