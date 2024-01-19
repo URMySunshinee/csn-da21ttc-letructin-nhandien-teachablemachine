@@ -15,7 +15,8 @@
 * p5.js (thư viện đồ họa để dựng lên mô hình trong trang web)
 
 ## Cách sử dụng sản phẩm của dự án này.
-Sản phẩm cuối cùng là phần code HTML được tích hợp mô hình đã huấn luyện mà tôi để trong file **src**, bạn chỉ cần lấy nó và chạy. <br>
+Sản phẩm cuối cùng là phần code HTML được tích hợp mô hình đã huấn luyện mà tôi để trong file **src**, bạn chỉ cần lấy nó và chạy.  
+
 Kết quả sau khi chạy code: <br> ![topdev](https://i.pinimg.com/736x/3e/bf/d3/3ebfd39b3201fa9e8f3425e3820bc6e5.jpg)
 
 ## Cách thay thế mô hình huấn luyện của bạn.
